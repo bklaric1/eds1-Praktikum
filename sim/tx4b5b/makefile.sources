@@ -1,0 +1,5 @@
+SYN_SOURCE_FILES = \
+../../src/tx4b5b_rtl.vhd
+
+
+

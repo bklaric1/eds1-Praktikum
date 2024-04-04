@@ -1,0 +1,4 @@
+
+SYN_SOURCE_FILES = \
+../../src/mem.vhd \
+../../src/ringbuf.vhd

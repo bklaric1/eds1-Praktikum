@@ -1,0 +1,6 @@
+SYN_SOURCE_FILES = \
+../../src/tx4b5b_rtl.vhd \
+../../src/stringtx_rtl.vhd \
+../../src/framesync_rtl.vhd
+
+

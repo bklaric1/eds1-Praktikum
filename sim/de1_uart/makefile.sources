@@ -1,0 +1,7 @@
+
+SYN_SOURCE_FILES = \
+../../src/uart_shiftreg_tx_rtl.vhd \
+../../src/uart_tx_rtl.vhd \
+../../src/stringtx_rtl.vhd \
+../../src/de1_uart.vhd
+

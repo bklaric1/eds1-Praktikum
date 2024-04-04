@@ -1,0 +1,128 @@
+## ----------------------------------------------------------------------------
+## Script     : makefile
+## ----------------------------------------------------------------------------
+## Author(s)  : Johann Faerber, Friedrich Beckmann
+## Company    : University of Applied Sciences Augsburg
+## ----------------------------------------------------------------------------
+## Description: This makefile allows automating design flow with ModelSim,
+##              it is based on a design directory structure shown at 
+##              the end of this file.
+## ----------------------------------------------------------------------------
+
+GHDL_CMD = ghdl
+GHDL_OPTIONS  = --std=08 --workdir=work
+LOG_FILE = ghdl.log
+
+ECHO_TARGET := echo "$$@"  >> $(LOG_FILE) 2>&1
+TIME_STAMP := echo "$$@ $$(date --iso=seconds)"
+TIME_STAMP_LOG_FILE := echo "$$@ $$(date --iso=seconds)" >> $(LOG_FILE) 2>&1
+
+###################################################################
+# Main Targets
+#
+###################################################################
+
+#==== Default target - running simulation without drawing waveforms ====#
+.PHONY : sim
+sim : t_$(PROJECT).ghw
+
+#==== WAVEFORM DRAWING ====#
+.PHONY : wave
+wave : t_$(PROJECT).ghw
+	@echo "---- $@"  >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP_LOG_FILE)
+	@gtkwave t_$(PROJECT).ghw view_signals.gtkw  >> $(LOG_FILE) 2>&1 &
+
+#==== SIMULATION ====#
+t_$(PROJECT).ghw : .compile.done
+	@echo "---- $@"  >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP_LOG_FILE)
+	@echo "Simulating ..."  2>&1 | tee -a $(LOG_FILE)
+	@$(GHDL_CMD) -r $(GHDL_OPTIONS) t_$(PROJECT) --wave=t_$(PROJECT).ghw >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP) > .sim.done
+
+#==== COMPILATION ====#
+compile : .compile.done
+
+.compile.done : $(SOURCE_FILES) .gproject.done
+	@echo "---- $@"  >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP_LOG_FILE)
+	@echo "Compiling ..."  >> $(LOG_FILE) 2>&1
+	@$(GHDL_CMD) -m $(GHDL_OPTIONS) --warn-default-binding t_$(PROJECT) 2>&1 | tee -a $(LOG_FILE)
+	@$(TIME_STAMP) > .compile.done
+
+#==== PROJECT CREATION ====#
+gproject : .gproject.done
+
+.gproject.done : makefile.sources
+	@echo "---- $@"  >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP_LOG_FILE)
+	@echo "Creating Project ..."  >> $(LOG_FILE) 2>&1
+	@rm -rf ./ghdl_sources.tcl
+	@# Create a directory work if it does not exist. Otherwise do nothing.
+	@[ -d work ] || mkdir -p work
+	@$(GHDL_CMD) -i $(GHDL_OPTIONS) $(SOURCE_FILES) 2>&1 | tee -a $(LOG_FILE) 
+	@$(TIME_STAMP) > .gproject.done
+
+#==== Synthesis Check ====#
+synthcheck : .compile.done
+	@echo "---- $@"  >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP_LOG_FILE)
+	@echo "Synthesis Check ..."  >> $(LOG_FILE) 2>&1
+	@$(GHDL_CMD) --synth --out=none $(GHDL_OPTIONS) $(PROJECT) 2>&1 | tee -a $(LOG_FILE)
+	@$(TIME_STAMP) > .synth.done
+
+warnings: $(LOG_FILE)
+	@echo "---- $@"  >> $(LOG_FILE) 2>&1
+	@$(TIME_STAMP_LOG_FILE)
+	@grep "Warning (" $(LOG_FILE)
+
+.PHONY : clean
+clean:
+	@$(GHDL_CMD) --remove; rm -rf work*.cf work *.vcd *.ghw *.log ghdl_sources.tcl .gproject.done .compile.done .sim.done .synth.done
+
+help:
+	@echo 'Default target is sim'
+	@echo '  "make gproject" to create a new ghdl project only'
+	@echo '  "make compile" to compile all VHDL sources in batch mode'
+	@echo '  "make sim" to run ghdl with the top testbench of the project'
+	@echo '  "make wave" to display the simulation results in the time domain'
+	@echo '  "make clean" to remove all generated files'
+
+
+## ----------------------------------------------------------------------------
+## Description: 
+## ------------
+## assumes the following design directory structure as prerequisite
+## 
+## DigitaltechnikPraktikum
+## |   
+## +---src
+## |       and2gate_equation.vhd
+## |       invgate_equation.vhd
+## |       mux2to1_structure.vhd
+## |       or2gate_equation.vhd
+## |       t_mux2to1.vhd
+## |       de1_mux2to1_structure.vhd
+## |
+## +---sim
+## |   |   makefile
+## |   |
+## |   \---mux2to1
+## |           makefile
+## |           makefile.sources
+## |
+## +---pnr
+## |   |   makefile
+## |   |
+## |   \---de1_mux2to1
+## |           de1_mux2to1_pins.tcl
+## |           makefile
+## |
+## \---scripts
+##         de1_pin_assignments_minimumio.csv
+##         de1_pin_assignments_minimumio.tcl
+##         modelsim.ini
+##         quartus_project_settings.tcl
+## ----------------------------------------------------------------------------
+

@@ -1,0 +1,20 @@
+## ----------------------------------------------------------------------------
+## Script     : makefile.sources
+## ----------------------------------------------------------------------------
+## Author     : Johann Faerber
+## Company    : University of Applied Sciences Augsburg
+## ----------------------------------------------------------------------------
+## Description: provide all the VHDL source files in the variable SYN_SOURCE_FILES
+##              Attention !!!
+##              -------------
+##              Do not forget a new line after the final source file !
+## ----------------------------------------------------------------------------
+
+SYN_SOURCE_FILES = \
+../../src/counter1st.vhd \
+../../src/counter1st_ccint.vhd \
+../../src/counter1st_ccus.vhd \
+../../src/counter1st_prus.vhd
+
+# do not delete this line
+# -----------------------------------------------------------------------------

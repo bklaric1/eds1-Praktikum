@@ -1,0 +1,3 @@
+
+SYN_SOURCE_FILES = \
+../../src/dpmem.vhd
