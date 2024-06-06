@@ -15,7 +15,7 @@ $(PROJECT).sdc:
 
 qproject: $(PROJECT).qpf
 
-$(PROJECT).qpf: $(SOURCE_FILES) ../../scripts/create_quartus_project_settings.tcl $(PROJECT)_pins.tcl ../../sim/$(SIM_PROJECT_NAME)/makefile.sources $(PROJECT).sdc
+$(PROJECT).qpf: $(SOURCE_FILES) ../../scripts/create_quartus_project_settings.tcl $(PROJECT)_pins.tcl $(PROJECT).sdc
 	# assign VHDL design files
 	rm -rf quartus_vhdl_source_files.tcl
 	for source_file in $(SOURCE_FILES); do \
