@@ -10,6 +10,7 @@ entity de1_vga_gen is
          b_o    : out   std_ulogic_vector(3 downto 0);
          hsync  : out   std_ulogic;
          vsync  : out   std_ulogic);
+end entity;
 
 architecture rtl of de1_vga_gen is
 
@@ -53,5 +54,51 @@ component bild_gen_rtl is
 end component;
 
 begin
+
+    line_cnt_i0 : line_cnt  
+    port map(
+        clk     => clk;
+        rst_n   => rst_n;
+        en      => ;
+        cnt_o   => ;
+    );  
+
+    pixel_cnt_i0 : pixel_cnt
+    port map(
+        clk        => clk ;
+        rst_n      => rst_n ;
+        en_i       : ;
+        cnt_o      : ;
+        done_o     : 
+    );
+
+    hsync_gen_rtl_i0 : hsync_gen_rtl
+    port map (
+        clk       => clk ;
+        rst_n     => rst_n ;
+        pixel_cnt : ;
+        hsync     : 
+    );
+
+    vsync_gen_rtl_i0 : vsync_gen_rtl
+    port map (
+        clk       => clk ;
+        rst_n     => rst_n ;
+        line_cnt  : ;
+        vsync     : 
+    );
+
+    bild_gen_rtl_i0 : bild_gen_rtl
+    port map (
+        clk       => clk ;
+        rst_n     => rst_n ;
+        x         : ;
+        y         : ;
+        r         : ;
+        g         : ;
+        b         : 
+    );
+    
+
 
 end architecture rtl;
