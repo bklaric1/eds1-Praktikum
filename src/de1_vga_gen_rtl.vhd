@@ -14,6 +14,13 @@ end entity;
 
 architecture rtl of de1_vga_gen is
 
+component clockengen is 
+    port (
+        clk         : in std_ulogic;
+        rst_n       : in std_ulogic;
+        en_o        : out std_ulogic);
+end component;
+
 component line_cnt is
     port (clk       : in  std_ulogic;
           rst_n     : in  std_ulogic;
@@ -53,7 +60,18 @@ component bild_gen_rtl is
     b         : out std_ulogic);
 end component;
 
+    signal pixel_en, pixel_done : std_ulogic;
+
+
 begin
+
+    clockengen_i0 : clockengen
+    port map (
+        clk     => clk;
+        rst_n   => rst_n;
+        en_o    => pixel_en 
+    );
+
 
     line_cnt_i0 : line_cnt  
     port map(
