@@ -7,22 +7,19 @@ entity bild_gen_rtl is
         rst_n     : in  std_ulogic;
         x         : in  std_ulogic_vector(9 downto 0);
         y         : in  std_ulogic_vector(9 downto 0);
-        r         : out std_ulogic;
-        g         : out std_ulogic;
-        b         : out std_ulogic);
+        r         : out std_ulogic_vector(3 downto 0);
+        g         : out std_ulogic_vector(3 downto 0);
+        b         : out std_ulogic_vector(3 downto 0));
 end entity;
 
 architecture rtl of bild_gen_rtl is
 
-  signal d, q     :   integer;
+  signal d, q     :		unsigned(3 downto 0);
 
 begin
 
-  g <= '0';
-  b <= '0';
-
-  q <= 0 when rst_n = '0' else d when rising_edge(clk);
-  d <= 1 when x > 47 and x < 688 else 0;
-  r <= std_ulogic(q);
+  r <= "1111" when x > "0000101111" and x < "1010110000" else "0000";
+  g <= "0000";
+  b <= "0000";
 
 end architecture rtl;

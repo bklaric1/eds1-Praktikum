@@ -12,6 +12,12 @@
 
 SYN_SOURCE_FILES = \
 ../../src/de1_vga_gen_rtl.vhd 
+../../src/hsync_gen_rtl.vhd 
+../../src/vsync_gen_rtl.vhd 
+../../src/line_cnt.vhd 
+../../src/pixel_cnt.vhd 
+../../src/clockengen.vhd 
+../../src/bild_gen_rtl.vhd
 
 # do not delete this line
 # -----------------------------------------------------------------------------
