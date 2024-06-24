@@ -12,7 +12,7 @@ end entity;
 
 architecture rtl of pixel_cnt is
 
-signal d, q, add, mpx   : unsigned(9 downto 0);
+signal d, q, add, mpx ,  : unsigned(9 downto 0);
 
 begin
 
